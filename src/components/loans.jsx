@@ -1,28 +1,26 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
 import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
   Separator,
-  Text,
   Stack,
 } from "@fluentui/react";
 
 const Loans = (props) => {
-  if (props.loansData.length === 0)
-    return (
-      <Text theme={props.customTheme}>
-        No Loans found for this score and rate.
-      </Text>
-    );
+  const [loans, setLoans] = useState([]);
+
+  useEffect(() => {
+    setLoans(props.loadData);
+  }, [props.loadData]);
+
   return (
     <Stack tokens={{ childrenGap: 20, padding: 20 }}>
       <Separator theme={props.customTheme}>
-        Loans found : {props.loansData.length}
+        Loans found : {loans.length}
       </Separator>
       <DetailsList
-        items={props.loansData}
+        items={loans}
         layoutMode={DetailsListLayoutMode.justified}
         selectionMode={SelectionMode.none}
       ></DetailsList>

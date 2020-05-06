@@ -1,24 +1,32 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Text, createTheme } from "@fluentui/react";
-import { getLoans } from "./services/fakeLoanServices";
 import Loans from "./components/loans";
 import LoanForm from "./components/loanForm";
+import "./App.css";
 
 function App() {
-  const loansData = getLoans();
-  const [loans, setLoans] = useState(loansData);
+  const [loans, setLoans] = useState([]);
+  const [url, setUrl] = useState("http://localhost:3000/loans");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const loanSearch = (loan) => {
-    const newArray = loans.filter(function (el) {
-      return (
-        el.creditScore === parseInt(loan.creditScore) &&
-        Math.round(el.rate) === parseFloat(loan.rate)
-      );
-    });
-    setLoans(newArray);
+  //Recat hook to make an async call. Used axios here.
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const result = await axios(url);
+      setLoans(result.data);
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [url]);
+
+  const loanSearchUrl = (url) => {
+    setUrl(url);
   };
 
+  //Theme for the textfield headings
   const theme = createTheme({
     fonts: {
       medium: {
@@ -36,12 +44,14 @@ function App() {
         </div>
         <div className="ms-Grid-row">
           <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
-            <LoanForm loanSearch={loanSearch} customTheme={theme} />
+            <LoanForm loanSearchUrl={loanSearchUrl} customTheme={theme} />
           </div>
           <div className="ms-Grid-col ms-sm6 ms-md8 ms-lg9">
-            <h2>
-              <Loans loansData={loans} customTheme={theme} />
-            </h2>
+            {isLoading ? (
+              <Text theme={theme}>Loading ...</Text>
+            ) : (
+              <Loans loadData={loans} customTheme={theme} />
+            )}
           </div>
         </div>
       </div>
