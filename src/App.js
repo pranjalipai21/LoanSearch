@@ -15,6 +15,7 @@ function App() {
     const fetchData = async () => {
       setIsLoading(true);
       const result = await axios(url);
+
       setLoans(result.data);
       setIsLoading(false);
     };

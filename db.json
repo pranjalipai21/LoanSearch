@@ -49,6 +49,16 @@
       "name": "test-loan-10",
       "creditScore": 757,
       "rate": 2.5
+    },
+    {
+      "name": "test-loan-11",
+      "creditScore": 740,
+      "rate": 6
+    },
+    {
+      "name": "test-loan-12",
+      "creditScore": 720,
+      "rate": 6
     }
   ]
 }

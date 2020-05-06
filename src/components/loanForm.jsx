@@ -10,14 +10,14 @@ import {
 } from "@fluentui/react";
 
 const LoanForm = (props) => {
-  //const [ratesVal, setRates] = useState("");
+  const [ratesVal, setRates] = useState("");
   const [creditScoreVal, setDropdown] = useState("");
 
-  // const handleInputChange = (event) => {
-  //   const { name, value } = event.target;
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
 
-  //   setRates({ ...ratesVal, [name]: value });
-  // };
+    setRates({ ...ratesVal, [name]: value });
+  };
 
   const handleDropdownChange = (event, item) => {
     setDropdown({ ...creditScoreVal, creditScore: item });
@@ -26,9 +26,12 @@ const LoanForm = (props) => {
   const submitForm = (event) => {
     event.preventDefault();
     if (!creditScoreVal.creditScore) return;
-
     props.loanSearchUrl(
-      `http://localhost:3000/loans?creditScore_gte=${creditScoreVal.creditScore.low}&creditScore_lte=${creditScoreVal.creditScore.high}`
+      `http://localhost:3000/loans?creditScore_gte=${
+        creditScoreVal.creditScore.low
+      }&creditScore_lte=${creditScoreVal.creditScore.high}&rate=${parseFloat(
+        ratesVal.rate
+      )}`
     );
   };
 
@@ -38,7 +41,7 @@ const LoanForm = (props) => {
 
   return (
     <Stack tokens={{ childrenGap: 20, padding: 20 }}>
-      <Text theme={props.customTheme}>Search based on Credit Score</Text>
+      <Text theme={props.customTheme}>Search Loans </Text>
 
       {/* <TextField
         label="What is your credit score? "
@@ -46,14 +49,15 @@ const LoanForm = (props) => {
         type="number"
         onChange={handleInputChange}
       /> */}
-      {/* <TextField
+
+      <TextField
         label="Rate of interest"
         required
         type="number"
         name="rate"
         value={ratesVal.rate}
         onChange={handleInputChange}
-      /> */}
+      />
       <Dropdown
         placeholder="Select an option"
         label="What is your credit score? "
