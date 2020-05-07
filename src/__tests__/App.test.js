@@ -19,7 +19,7 @@ test("App loads with initial state empty textfields and disabled search button a
   expect(getByTestId("searchButton")).toHaveClass("is-disabled");
 });
 
-test("App loads with initial state empty textfields and disabled search button and a Table with values", async () => {
+test("When user form is updated and button is clicked", async () => {
   const { getByTestId } = render(<App />);
 
   const inputRate = getByTestId("rateField");
