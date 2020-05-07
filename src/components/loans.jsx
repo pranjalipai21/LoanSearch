@@ -23,7 +23,8 @@ const Loans = (props) => {
         items={loans}
         layoutMode={DetailsListLayoutMode.justified}
         selectionMode={SelectionMode.none}
-      ></DetailsList>
+        listProps={{ "data-testid": "loansTable" }}
+      />
     </Stack>
   );
 };

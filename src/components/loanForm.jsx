@@ -8,15 +8,15 @@ import {
   DefaultButton,
   Dropdown,
 } from "@fluentui/react";
+import { initializeIcons } from "@uifabric/icons";
+initializeIcons();
 
 const LoanForm = (props) => {
-  const [ratesVal, setRates] = useState("");
+  const [ratesVal, setRates] = useState(0);
   const [creditScoreVal, setDropdown] = useState("");
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-
-    setRates({ ...ratesVal, [name]: value });
+    setRates(event.target.value);
   };
 
   const handleDropdownChange = (event, item) => {
@@ -30,7 +30,7 @@ const LoanForm = (props) => {
       `http://localhost:3000/loans?creditScore_gte=${
         creditScoreVal.creditScore.low
       }&creditScore_lte=${creditScoreVal.creditScore.high}&rate=${parseFloat(
-        ratesVal.rate
+        ratesVal
       )}`
     );
   };
@@ -42,25 +42,19 @@ const LoanForm = (props) => {
   return (
     <Stack tokens={{ childrenGap: 20, padding: 20 }}>
       <Text theme={props.customTheme}>Search Loans </Text>
-
-      {/* <TextField
-        label="What is your credit score? "
-        required
-        type="number"
-        onChange={handleInputChange}
-      /> */}
-
       <TextField
         label="Rate of interest"
         required
         type="number"
         name="rate"
-        value={ratesVal.rate}
+        data-testid="rateField"
+        value={ratesVal}
         onChange={handleInputChange}
       />
       <Dropdown
         placeholder="Select an option"
         label="What is your credit score? "
+        data-testid="creditScoreField"
         options={[
           { key: 1, low: 750, high: 850, text: "750 - 850" },
           { key: 2, low: 700, high: 749, text: "700 - 749" },
@@ -72,10 +66,17 @@ const LoanForm = (props) => {
         onChange={handleDropdownChange}
       />
       <Stack horizontal tokens={{ childrenGap: 20 }} horizontalAlign="center">
-        <PrimaryButton text="Search" allowDisabledFocus onClick={submitForm} />
+        <PrimaryButton
+          text="Search"
+          allowDisabledFocus
+          data-testid="searchButton"
+          onClick={submitForm}
+          disabled={ratesVal === "" || creditScoreVal === ""}
+        />
         <DefaultButton
           text="Refresh"
           allowDisabledFocus
+          data-testid="refreshButton"
           onClick={refreshPage}
         />
       </Stack>

@@ -1,27 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import { Text, createTheme } from "@fluentui/react";
 import Loans from "./components/loans";
 import LoanForm from "./components/loanForm";
 import "./App.css";
+import useFetch from "./useFetch";
 
 function App() {
-  const [loans, setLoans] = useState([]);
-  const [url, setUrl] = useState("http://localhost:3000/loans");
-  const [isLoading, setIsLoading] = useState(false);
-
-  //Recat hook to make an async call. Used axios here.
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const result = await axios(url);
-
-      setLoans(result.data);
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [url]);
+  const [{ loans, isLoading, isError }, setUrl] = useFetch(
+    "http://localhost:3000/loans",
+    []
+  );
 
   const loanSearchUrl = (url) => {
     setUrl(url);
@@ -48,8 +36,19 @@ function App() {
             <LoanForm loanSearchUrl={loanSearchUrl} customTheme={theme} />
           </div>
           <div className="ms-Grid-col ms-sm6 ms-md8 ms-lg9">
+            {isError && (
+              <Text
+                theme={theme}
+                data-testid="isError"
+                style={{ color: "red" }}
+              >
+                Something went wrong ...
+              </Text>
+            )}
             {isLoading ? (
-              <Text theme={theme}>Loading ...</Text>
+              <Text theme={theme} data-testid="isLoading">
+                Loading ...
+              </Text>
             ) : (
               <Loans loadData={loans} customTheme={theme} />
             )}
