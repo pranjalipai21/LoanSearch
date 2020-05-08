@@ -13,7 +13,7 @@ test("useFetch performs GET request", async () => {
   const mock = new MockAdapter(axios);
 
   const mockData = "response";
-  const url = "http://mock";
+  const url = "http://localhost:3000/loans";
   mock.onGet(url).reply(200, mockData);
 
   const { result, waitForNextUpdate } = renderHook(() =>
